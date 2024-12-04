@@ -133,8 +133,52 @@ void transformWord(char* originalWord, int* permutation, char* transformedWord, 
 
 }
 
+/* Custom function to check if the input word is present in the dictionary i.e valid */
+ELEMENT_TYPE* compareWords(char* inputWord, BINARY_TREE_TYPE tree) {
 
+	if (tree == NULL) {
+		// Base case: If the tree is empty, return NULL
+		return NULL;
+	}
 
+	char* treeWord = (char*)malloc((strlen(tree->element.string) + 1) * sizeof(char));
+	//char treeWord[strlen(tree->element.string) + 1];
+
+	if (treeWord == NULL) {
+		return NULL;
+	}
+
+	strcpy(treeWord, tree->element.string);
+
+	for (int k = 0; k < strlen((tree->element.string) + 1); k++) {
+		treeWord[k] = tolower(treeWord[k]);
+	}
+
+	int comparison = strcmp(inputWord, treeWord);
+
+	//if (comparison == 0) {
+	//	// Exact match found
+	//	return &tree->element;
+	//}
+
+	free(treeWord);
+
+	if (comparison > 0) {
+		// Recursively search in the left subtree
+		//printf("Going left because %s comes before %s\n",inputWord, tree->element.string);
+		return compareWords(inputWord, tree->left);
+	}
+	else if (comparison < 0) {
+		// Recursively search in the right subtree
+		//printf("Going right because %s comes after %s\n",inputWord, tree->element.string);
+		return compareWords(inputWord, tree->right);
+	}
+	else {
+		// If the words are equal, return the found element
+		//printf("\nWord found\n");
+		return &(tree)->element;
+	}
+}
 
 
 void prompt_and_exit(int status) {

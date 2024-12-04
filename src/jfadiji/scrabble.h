@@ -41,6 +41,9 @@ struct combWord {
 	int word[NUMBER_OF_TILES];
 };
 
+struct foundWord {
+	char word[NUMBER_OF_TILES];
+};
 
 /* function prototypes */
 /* ------------------- */
@@ -59,3 +62,4 @@ void process_solution            (int a[], int k, int n, combWord allPermutation
 
 void prompt_and_exit(int status);
 void transformWord(char* originalWord, int* permutation, char* transformedWord, int wordLength);
+ELEMENT_TYPE* compareWords(char* inputWord, BINARY_TREE_TYPE tree);
