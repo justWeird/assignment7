@@ -18,14 +18,14 @@
 
 /* original backtracking code ... needs to be adapted for the assignment */
 
-void backtrack(int a[], int k, int input) {
+void backtrack(int a[], int k, int input, combWord allPerm[], int* permutation) {
 
    int c[MAXCANDIDATES];     /* candidates for next position  */
    int ncandidates;          /* next position candidate count */
    int i;                    /* counter                       */
 
    if (is_a_solution(a,k,input)) {
-      process_solution(a,k,input);
+       process_solution(a, k, input, allPerm, permutation);
    } 
    else {
       k = k+1;
@@ -34,7 +34,7 @@ void backtrack(int a[], int k, int input) {
       for (i=0; i<ncandidates; i++) {
          a[k] = c[i];
          //make_move(a,k,input);
-         backtrack(a,k,input);
+         backtrack(a,k,input, allPerm, permutation);
          //unmake_move(a,k,input);
       }
    }
@@ -47,7 +47,7 @@ bool is_a_solution(int a[], int k, int n) {
 }
  
 
-void process_solution(int a[], int k, int input) {
+void process_solution(int a[], int k, int input, combWord allPermutations[], int *permutationCount) {
 
    int i;                       /* counter */
    bool print_permuations;      /* flag ... set to true if you want the permutations listed to the terminal */
@@ -60,6 +60,24 @@ void process_solution(int a[], int k, int input) {
       }
       printf("\n");
    }
+
+   /* pass current permutation to allPermutation array */
+  // Create a new combWord to store the current permutation
+   combWord currentPermutation;
+
+   // Copy the elements from a[] to the current permutation
+   // Note: Assuming a[] starts from index 1, so we adjust the copying accordingly
+   for (i = 1; i <= k; i++) {
+       currentPermutation.word[i - 1] = a[i];
+   }
+
+   // Add the current permutation to the allPermutations array
+   allPermutations[*permutationCount] = currentPermutation;
+
+   // Increment the permutation count
+   *permutationCount = *permutationCount + 1 ;
+
+
 }
  
 
@@ -97,7 +115,27 @@ void construct_candidates_permutation(int a[], int k, int n, int c[], int *ncand
       }
    }
 }
- 
+
+// Function to transform the original word based on a permutation
+void transformWord(char* originalWord, int* permutation, char* transformedWord, int wordLength) {
+    // Iterate through the permutation array
+    for (int i = 0; i < wordLength; i++) {
+        // The permutation array contains 1-based indices
+        // So we subtract 1 to convert to 0-based indices for array access
+        int originalIndex = permutation[i] - 1;
+
+        // Copy the character from the original word to the transformed word
+        // based on the permutation
+        transformedWord[i] = originalWord[originalIndex];
+    }
+
+    transformedWord[wordLength] = '\0';
+
+}
+
+
+
+
 
 void prompt_and_exit(int status) {
    printf("Press any key to continue and close terminal\n");

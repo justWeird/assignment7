@@ -1,8 +1,3 @@
  ../data/words.txt
  ../data/letter_values.txt
- sitnesw
- nbandoa
- nbanboa
- abandoo
- evensaz
- wittnes
+sitnesw

@@ -28,7 +28,7 @@
 #define NMAX              NUMBER_OF_TILES+1 // NMAX must be the number of elements in the permutation + 1 to allow for counting from 1, rather than 0. DV 22/3/2019
 #define MAX_STRING_LENGTH 81
 
- 
+#include "binaryTree.h"
 
 /* data structure to represent a Scrabble tile */
 
@@ -37,13 +37,17 @@ struct record_type {
    char letter;   // the Scrabble letter
 };
 
+struct combWord {
+	int word[NUMBER_OF_TILES];
+};
+
 
 /* function prototypes */
 /* ------------------- */
 
 /* utility function to remove a newline character that may have been included when parsing the input data */
 
-void backtrack            (int a[], int k, int n);                                    // original backtrack
+void backtrack            (int a[], int k, int n, combWord allCombination[], int *permutationCount);                                    // original backtrack
 
 bool is_a_solution(int a[], int k, int n);
 
@@ -51,6 +55,7 @@ void construct_candidates_permutation(int a[], int k, int n, int c[], int *ncand
 
 void construct_candidates_subset(int a[], int k, int n, int c[], int *ncandidates);               // subset construct_candidates
 
-void process_solution            (int a[], int k, int n);                                         // original process_solution
+void process_solution            (int a[], int k, int n, combWord allPermutations[], int *permutationCount);                                         // original process_solution
 
 void prompt_and_exit(int status);
+void transformWord(char* originalWord, int* permutation, char* transformedWord, int wordLength);
