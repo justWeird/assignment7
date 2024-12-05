@@ -43,6 +43,7 @@ struct combWord {
 
 struct foundWord {
 	char word[NUMBER_OF_TILES];
+	int score;
 };
 
 /* function prototypes */
@@ -63,3 +64,5 @@ void process_solution            (int a[], int k, int n, combWord allPermutation
 void prompt_and_exit(int status);
 void transformWord(char* originalWord, int* permutation, char* transformedWord, int wordLength);
 ELEMENT_TYPE* compareWords(char* inputWord, BINARY_TREE_TYPE tree);
+int getWordScore(char* word, struct record_type letter_values[], int letter_count);
+int getHighestWordindex(struct foundWord foundWords[], int foundWordCount);

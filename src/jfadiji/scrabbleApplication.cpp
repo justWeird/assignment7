@@ -112,8 +112,9 @@ int main() {
 	struct combWord allPermutations[5041];              // holds all the permutations of the 7 letters
 	int permutationsCount = 0;                          // count of the number of permutations
 	char currentWordPerm[NUMBER_OF_TILES];              // holds the current permutation of the 7 letters
-	char foundWords[10][7];							   // holds the words found in the dictionary in an array max of 10 each word has 7 letters
+	struct foundWord foundWords[10];					// holds the words found in the dictionary in an array max of 10 each word has 7 letters
 	int countFound = 0;
+	int highestFoundIndex;             // holds the highest scoring word
 
 
 
@@ -273,6 +274,7 @@ int main() {
 /* now process the result here ... */
 
 		countFound = 0; //reset the count of found words
+		int wordScore = 0;
 
 /* Convert the scrabble word based on the permutation number in the allPermutations array i.e 'witness' gets transformed to 'itweness' */
 		for (int i = 0; i < permutationsCount; i++) {    //for every possible permutation, transform the scrabble letter
@@ -286,7 +288,7 @@ int main() {
 				// Check if the word is already in the foundWords array
 				bool isDuplicate = false;  // Flag to check for duplicates
 				for (int i = 0; i <= countFound; i++) {
-					if (strcmp(foundWords[i], currentWordPerm) == 0) {
+					if (strcmp(foundWords[i].word, currentWordPerm) == 0) {
 						isDuplicate = true;  // Found a duplicate
 						break;
 					}
@@ -297,10 +299,15 @@ int main() {
 					countFound++;
 
                     // If no duplicate, add the word to foundWords
-                    strcpy(foundWords[countFound], currentWordPerm);
+                    strcpy(foundWords[countFound].word, currentWordPerm);
+
+					wordScore = getWordScore(currentWordPerm, letter_values, NUMBER_OF_LETTERS);
+
+					foundWords[countFound].score = wordScore;
 
 					// Add the word to the binary tree (not shown here)
 					printf("Transformed Word: %s\n", currentWordPerm);
+					printf("Word Score: %d\n", foundWords[countFound].score);
 
 					
 				}
@@ -313,6 +320,23 @@ int main() {
 
 		/* print the results */
 
+		/* if no valid word is found, print the scrabble letters and a score of 0 */
+		if (countFound == 0) {
+			printf("%s		%d\n", scrabble_letters, 0);
+			fprintf(fp_out, "%s		%d\n", scrabble_letters, 0);
+		}
+		else {
+			/* for a valid word, obtain the score based on the letter values */
+			highestFoundIndex = getHighestWordindex(foundWords, countFound);
+
+			printf("%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
+			fprintf(fp_out, "%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
+		}
+		
+		//reset all the values
+		permutationsCount = 0;
+		countFound = 0;
+		wordScore = 0;
 
 
 		end_of_file = fscanf(fp_in, "%s", scrabble_letters);  // read the next set of seven letters

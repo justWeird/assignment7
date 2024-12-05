@@ -180,6 +180,45 @@ ELEMENT_TYPE* compareWords(char* inputWord, BINARY_TREE_TYPE tree) {
 	}
 }
 
+/* Function to obtain word score using letter values */
+int getWordScore(char* word, struct record_type letter_values[], int letter_count) {
+    int score = 0;
+
+    // Iterate through each character in the word
+    for (int i = 0; i < strlen(word); i++) {
+        char currentLetter = word[i];
+
+        // Look up the value for the current letter in letter_values
+        for (int j = 0; j < letter_count; j++) {
+            if (letter_values[j].letter == currentLetter) {
+                score += letter_values[j].value;  // Add the value to the score
+                break;  // Stop searching once a match is found
+            }
+        }
+    }
+
+    return score;
+}
+
+
+/* Function to get the highest word score in the found words array */
+int getHighestWordindex(struct foundWord foundWords[], int foundWordCount) {
+	int highestScore = 0;
+	int highestIndex = 0;
+
+	// Iterate through the found words array
+	for (int i = 1; i <= foundWordCount; i++) {
+		if (foundWords[i].score > highestScore) {
+			highestScore = foundWords[i].score;  // Update the highest score
+			highestIndex = i;
+		}
+	}
+
+
+
+	return highestIndex;
+}
+
 
 void prompt_and_exit(int status) {
    printf("Press any key to continue and close terminal\n");
