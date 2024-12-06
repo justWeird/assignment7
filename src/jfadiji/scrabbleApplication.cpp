@@ -119,7 +119,7 @@ int main() {
 
 
 
-	int debug = TRUE;                                    // flag: if TRUE print information to assist with debugging
+	int debug = false;                                    // flag: if TRUE print information to assist with debugging
 
 	FILE* fp_in;                                         // file pointer for input file
 	FILE* fp_out;                                        // file pointer for output file
@@ -288,19 +288,18 @@ int main() {
 			fprintf(fp_out, "%s		%d\n", scrabble_letters, 0);
 		}
 		else {
-			/* for a valid word, obtain the score based on the letter values */
+			/* for a valid word, obtain the score based on the letter values and based on the one found first alphabetically */
 			highestFoundIndex = getHighestWordindex(foundWords, countFound);
 
 			printf("%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
 			fprintf(fp_out, "%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
 		}
 
-
-
 		//reset all the values
 		permutationsCount = 0;
 		countFound = 0;
 		wordScore = 0;
+
 		//reset found words
 		for (int i = 0; i < 20; i++) {
 			strcpy(foundWords[i].word, "");

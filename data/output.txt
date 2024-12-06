@@ -4,4 +4,14 @@ abandon		10
 ban		5
 band		7
 seven		8
-wine		7
+news		7
+plate		7
+stomach		14
+golden		8
+square		15
+stick		11
+pilot		7
+safe		7
+credit		9
+whom		12
+part		6
