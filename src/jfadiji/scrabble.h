@@ -51,7 +51,7 @@ struct foundWord {
 
 /* utility function to remove a newline character that may have been included when parsing the input data */
 
-void backtrack            (int a[], int k, int n, combWord allCombination[], int *permutationCount);                                    // original backtrack
+void backtrack            (int a[], int k, int n, combWord allCombination[], int *permutationCount, char* originalWord, BINARY_TREE_TYPE dictionaryTree, int* countFound, struct foundWord foundWords[], struct record_type letter_values[], FILE* fp_out);                                    // original backtrack
 
 bool is_a_solution(int a[], int k, int n);
 
@@ -66,3 +66,4 @@ void transformWord(char* originalWord, int* permutation, char* transformedWord, 
 ELEMENT_TYPE* compareWords(char* inputWord, BINARY_TREE_TYPE tree);
 int getWordScore(char* word, struct record_type letter_values[], int letter_count);
 int getHighestWordindex(struct foundWord foundWords[], int foundWordCount);
+//void backtrack_subset(int a[], int k, int input, combWord allSubsets[], int* subsetCount, char* originalLetters);

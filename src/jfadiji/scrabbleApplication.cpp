@@ -112,7 +112,7 @@ int main() {
 	struct combWord allPermutations[5041];              // holds all the permutations of the 7 letters
 	int permutationsCount = 0;                          // count of the number of permutations
 	char currentWordPerm[NUMBER_OF_TILES];              // holds the current permutation of the 7 letters
-	struct foundWord foundWords[10];					// holds the words found in the dictionary in an array max of 10 each word has 7 letters
+	struct foundWord foundWords[100];					// holds the words found in the dictionary in an array max of 10 each word has 7 letters
 	int countFound = 0;
 	int highestFoundIndex;             // holds the highest scoring word
 
@@ -261,9 +261,12 @@ int main() {
 		/* main processing begins here */
 		/* --------------------------- */
 
+		countFound = 0; //reset the count of found words
+		int wordScore = 0;
+
 		/* use backtracking to generate all permutations and store the permutation giving the highest value */
 
-		backtrack(a, 0, n, allPermutations, &permutationsCount);  // This is the original call from the notes and will just print the permutations to the terminal
+		backtrack(a, 0, n, allPermutations, &permutationsCount, scrabble_letters, wordTree, &countFound, foundWords, letter_values, fp_out);  // This is the original call from the notes and will just print the permutations to the terminal
 		// (set the print_permutations flag to true in the process_solution() function)
 		// It needs to be modified so that the data structures required for Assignment 7 are passed as arguments
 		// e.g. the seven letters, the letter-value pairs, and the list of admissible words
@@ -273,49 +276,8 @@ int main() {
 
 /* now process the result here ... */
 
-		countFound = 0; //reset the count of found words
-		int wordScore = 0;
-
-/* Convert the scrabble word based on the permutation number in the allPermutations array i.e 'witness' gets transformed to 'itweness' */
-		for (int i = 0; i < permutationsCount; i++) {    //for every possible permutation, transform the scrabble letter
-
-			// Transform the word
-			transformWord(scrabble_letters, allPermutations[i].word, currentWordPerm, NUMBER_OF_TILES);
-
-			/* import the custom function for comparing words */
-			if (compareWords(currentWordPerm, wordTree) != NULL) {
-
-				// Check if the word is already in the foundWords array
-				bool isDuplicate = false;  // Flag to check for duplicates
-				for (int i = 0; i <= countFound; i++) {
-					if (strcmp(foundWords[i].word, currentWordPerm) == 0) {
-						isDuplicate = true;  // Found a duplicate
-						break;
-					}
-				}
-
-				if (!isDuplicate) {
-					// If no duplicate, add the word to foundWords
-					countFound++;
-
-                    // If no duplicate, add the word to foundWords
-                    strcpy(foundWords[countFound].word, currentWordPerm);
-
-					wordScore = getWordScore(currentWordPerm, letter_values, NUMBER_OF_LETTERS);
-
-					foundWords[countFound].score = wordScore;
-
-					// Add the word to the binary tree (not shown here)
-					printf("Transformed Word: %s\n", currentWordPerm);
-					printf("Word Score: %d\n", foundWords[countFound].score);
-
-					
-				}
-			}
-
-
-
-		}
+		//at the end of backtracking function, the foundWords array will have all the valid words found in the dictionary
+		//the countFound will have the number of valid words found in the dictionary
 
 
 		/* print the results */
@@ -332,11 +294,23 @@ int main() {
 			printf("%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
 			fprintf(fp_out, "%s		%d\n", foundWords[highestFoundIndex].word, foundWords[highestFoundIndex].score);
 		}
-		
+
+
+
 		//reset all the values
 		permutationsCount = 0;
 		countFound = 0;
 		wordScore = 0;
+		//reset found words
+		for (int i = 0; i < 20; i++) {
+			strcpy(foundWords[i].word, "");
+			foundWords[i].score = 0;
+		}
+
+		//reset a which is the permutation of letters
+		for (int i = 0; i < NUMBER_OF_TILES; i++) {
+			a[i] = 0;
+		}
 
 
 		end_of_file = fscanf(fp_in, "%s", scrabble_letters);  // read the next set of seven letters
